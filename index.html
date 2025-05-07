@@ -393,14 +393,12 @@
 	
 
 <script>
-var doload = true;
-
-if (doload==true)
-{
- setTimeout(function() {location.reload();}, 3000);
- doload=false;
+if (!sessionStorage.getItem('hasReloaded')) {
+    sessionStorage.setItem('hasReloaded', 'true');
+    setTimeout(function() {
+        location.reload();
+    }, 3000);
 }
-
 </script>
 
 <script>
