@@ -160,9 +160,11 @@
   <!--teachers chair--> 
       <a-obj-model position="7.61298 0.95228 -3.55314" scale="0.45 0.35 0.4" rotation="0 135 0" src="#model4" mtl="#mtl4"></a-obj-model>
   
-  	   <!--board-->
-		 <a-obj-model  position="9.28517 2.51882 1.42632" scale="0.018 0.018  0.018 " rotation="0 0 0" src="#model21" mtl="#mtl21"></a-obj-model>
-
+  <!--board-->
+  <a-entity position="9.28517 2.51882 1.42632">
+	<a-obj-model  scale="0.018 0.018  0.018 " rotation="0 0 0" src="#model21" mtl="#mtl21"></a-obj-model>
+    <a-text color=black>  Instruction </a-text>
+  </a-entity>
   <!-- bookshelf -->
 	  <a-obj-model position="-12.111 1.55725 8.70071" scale="0.6 0.7 0.9" rotation="0 0 0" src="#model5" material="repeat: 25 1; src:./models/wood.png"></a-obj-model>
 
