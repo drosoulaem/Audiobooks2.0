@@ -393,7 +393,7 @@
 	
 
 
-<!-- LOCAL AUTO REOAD -->
+<!-- LOCAL AUTO RELOAD
 <script>
    window.addEventListener('DOMContentLoaded', () => {
      const url = new URL(window.location);
@@ -402,12 +402,11 @@
      if (!hasReloaded) {setTimeout(() => {
           url.searchParams.set("reloaded", "true");
           window.location.href = url.toString();
-                                         }, 15000);
+                                         }, 3000);
                        }
                                                      });
-</script>
-	
-	<!-- AUTO RELOAD WITH SESSION_STORAGE 
+</script> -->
+
 <script>
 if (!sessionStorage.getItem('hasReloaded')) {
     sessionStorage.setItem('hasReloaded', 'true');
@@ -415,7 +414,7 @@ if (!sessionStorage.getItem('hasReloaded')) {
         location.reload();
     }, 3000);
 }
-</script> -->
+</script> 
 
 <script>
 	var Thebooks = [];
