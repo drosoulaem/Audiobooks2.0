@@ -1,0 +1,752 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title> Audio Books </title> 
+	<link rel='icon' href='./myfavicon.ico'>
+	
+  <!-- A-Frame 1.0.4 (COMPATABLE with aframe-extras) -->
+  <script type="text/JavaScript" src="./aframe.min.1_0_4.js"></script>
+
+  <!-- aframe-extras 6.1.1 FOR NAV MESH -->
+  <script type="text/JavaScript" src="./aframe-extras.min.js"></script>
+  
+    <!-- style for the UI -->
+  	 <style>
+        #overlay {
+            position: absolute;
+            top: 10%; 
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 24px;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+            display: none; 
+			z-index: 9999;
+        }
+		/*right button*/
+		#toggleButton1 {
+        position: absolute;
+        bottom: 20px;
+       /* left: 150px; */
+      	right: 150px;
+        padding: 20px 20px;
+        font-size: 16px;
+        background-color: #7e70ec;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        z-index: 10; 
+      }
+	  /*left button*/
+      #toggleButton2 {
+        position: absolute;
+        bottom: 20px;
+     	right: 300px; /*250*/
+       /* left: 50px;*/
+        padding: 20px 20px;
+        font-size: 16px;
+        background-color: #7e70ec;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        z-index: 10; 
+      }
+	  /*backward button*/
+      #toggleButton3 {
+        position: absolute;
+        bottom: 20px;
+     /* right: 200px;*/
+        left: 100px;
+        padding: 20px 20px;
+        font-size: 16px;
+        background-color: #7e70ec;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        z-index: 10; 
+      }
+	  /*front button*/
+      #toggleButton4 {
+        position: absolute;
+        bottom: 150px; /* 70*/
+     /* right: 200px;*/
+        left: 100px;
+        padding: 20px 20px;
+        font-size: 16px;
+        background-color: #7e70ec;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        z-index: 10; 
+          }
+    </style>
+	
+  </head>
+  
+  <body>
+    <!-- UI -->
+    <div id="overlay"> </div>
+	
+ 	<button hide-on-enter-vr id="toggleButton1" ontouchstart="right()"  ontouchend="clear_d()"  ontouchcancel="clear_d()" onmousedown="right()"  onmouseup="clear_d()" ></button>
+	<button hide-on-enter-vr id="toggleButton2" ontouchstart=" left()"  ontouchend="clear_c()"  ontouchcancel="clear_c()" onmousedown=" left()"  onmouseup="clear_c()" ></button>
+    <button hide-on-enter-vr id="toggleButton3" ontouchstart="backward()"  ontouchend="clear_b()" ontouchcancel="clear_b()" onmousedown="backward()" onmouseup="clear_b()"></button>
+	<button hide-on-enter-vr id="toggleButton4" ontouchstart="forward()" ontouchend="clear_a()"  ontouchcancel="clear_a()" onmousedown="forward()" onmouseup="clear_a()"></button>
+
+
+
+    <a-scene>
+	
+  
+	  <a-assets>
+	  <!-- Μοντελα Eπιπλων -->
+	    <a-asset-item id="model1" src="./models/school.gltf"></a-asset-item>  <!--student desk -->
+	    <a-asset-item id="model2" src="./models/chair.gltf"></a-asset-item>	  <!--student chair -->
+		
+        <a-asset-item id="model3" src="./models/teachersdesk.obj"></a-asset-item>  <!-- teachers Desk -->
+        <a-asset-item id="mtl3" src="./models/teachersdesk.mtl"></a-asset-item> <!-- teachers Desk MTL-->
+		
+		<a-asset-item id="model4" src="./models/tchairblend.obj"></a-asset-item>  <!-- teachers Chair -->
+        <a-asset-item id="mtl4" src="./models/tchairblend.mtl"></a-asset-item> <!-- teachers Chair MTL-->
+	  
+	    <a-asset-item id="model5" src="./models/bookcase.obj"></a-asset-item>  <!-- Bookcase -->
+	    
+	<!-- Μοντελα Βιβλιων -->
+		<a-asset-item id="model6" src="./models/result.gltf"></a-asset-item>  <!-- Βιβλιο Ιστοριας Γ Δημοτικου -->
+		
+		<a-asset-item id="model7" src="./models/result2.gltf"></a-asset-item>  <!-- Βιβλιο Οδυσσειας Α Γυμνασιου -->
+		
+		<a-asset-item id="model8" src="./models/result4.gltf"></a-asset-item>  <!-- Βιβλιο Λογοτεχνιας Β Λυκειου -->
+	    
+	    <a-asset-item id="model9" src="./models/book6.obj"></a-asset-item>  <!-- Λογοτεχνια Β Γυμνασιου -->
+	    <a-asset-item id="mtl9" src="./models/book6.mtl"></a-asset-item>   <!-- MTL για Λογοτεχνια Β Γυμνασιου -->
+		
+	    <a-asset-item id="model10" src="./models/book7.obj"></a-asset-item>  <!-- Μουσικη Γ Γυμνασιου -->
+	    <a-asset-item id="mtl10" src="./models/book7.mtl"></a-asset-item>   <!-- MTL για Μουσικη Γ Γυμνασιου -->
+		
+	    <a-asset-item id="model11" src="./models/book9.obj"></a-asset-item>  <!-- Λογοτεχνια Γ Λυκειου -->
+	    <a-asset-item id="mtl11" src="./models/book9.mtl"></a-asset-item>   <!-- MTL για Λογοτεχνια Γ Λυκειου -->
+		
+	    <a-asset-item id="model12" src="./models/book10.obj"></a-asset-item>  <!-- Λογοτεχνια Γ & Δ Δημοτικου -->
+	    <a-asset-item id="mtl12" src="./models/book10.mtl"></a-asset-item>   <!-- MTL για Λογοτεχνια Γ & Δ Δημοτικου -->
+			
+	    <a-asset-item id="model13" src="./models/book11.obj"></a-asset-item>  <!-- Φυσικη Γ Γυμνασιου -->
+	    <a-asset-item id="mtl13" src="./models/book11.mtl"></a-asset-item>   <!-- MTL για Φυσικη Γ Γυμνασιου -->	
+		
+	    <a-asset-item id="model14" src="./models/book12.obj"></a-asset-item>  <!-- Γλωσσα Α Δημοτικου -->
+	    <a-asset-item id="mtl14" src="./models/book12.mtl"></a-asset-item>   <!-- MTL για Γλωσσα Α Δημοτικου -->
+			
+	    <a-asset-item id="model15" src="./models/book13.obj"></a-asset-item>  <!-- Γεωγραφια ΣΤ Δημοτικου -->
+	    <a-asset-item id="mtl15" src="./models/book13.mtl"></a-asset-item>   <!-- MTL για Γεωγραφια ΣΤ Δημοτικου -->	
+			
+	    <a-asset-item id="model16" src="./models/book14.obj"></a-asset-item>  <!-- Γλωσσα ΣΤ Δημοτικου -->
+	    <a-asset-item id="mtl16" src="./models/book14.mtl"></a-asset-item>   <!-- MTL για Γλωσσα ΣΤ Δημοτικου -->	
+			
+	    <a-asset-item id="model17" src="./models/book81.obj"></a-asset-item>  <!-- Φυσικη Ε Δημοτικου -->
+	    <a-asset-item id="mtl17" src="./models/book81.mtl"></a-asset-item>   <!-- MTL για Φυσικη Ε Δημοτικου -->		  
+			
+	    <a-asset-item id="model18" src="./models/book31.obj"></a-asset-item>  <!-- Φιλοσοφια Β Λυκειου -->
+	    <a-asset-item id="mtl18" src="./models/book31.mtl"></a-asset-item>   <!-- MTL για Φιλοσοφια Β Λυκειου -->	
+		
+	    <a-asset-item id="model19" src="./models/AB/book5blend.obj"></a-asset-item>  <!--  Λογοτεχνια Α & Β Δημοτικου -->
+	    <a-asset-item id="mtl19" src="./models/AB/book5blend.mtl"></a-asset-item>   <!-- MTL για Λογοτεχνια Α & Β Δημοτικου -->		  
+
+	<!-- 	<a-asset-item id="model20" src="./models/lowpoly.obj"></a-asset-item>   καθηγητής low poly-->
+	    <!-- <a-asset-item id="mtl20" src="./models/lowpoly.mtl"></a-asset-item>   MTL για καθηγητή -->	
+
+		<a-asset-item id="model20" src="./models/lowpolychar/lowpolychar.obj"></a-asset-item>  <!--  καθηγητής animal -->
+	    <a-asset-item id="mtl20" src="./models/lowpolychar/lowpolychar.mtl"></a-asset-item>   <!-- MTL για καθηγητή -->		
+		
+		<a-asset-item id="model21" src="./models/board.obj"></a-asset-item>  <!--  καθηγητής -->
+	    <a-asset-item id="mtl21" src="./models/board.mtl"></a-asset-item> 
+
+
+	  <!-- Hxoi -->
+		<audio id="sound-1" src="./sounds/vaporaki.ogg" preload='auto'></audio>
+	    <audio id="sound-2" src="./sounds/voulgari.mp3" preload='auto'></audio>
+	    <audio id="sound-3" src="./sounds/giaslakiotis.mp3" preload='auto'></audio>
+	    <audio id="sound-4" src="./sounds/grigoratos.mp3" preload='auto'></audio>
+	    <audio id="sound-5" src="./sounds/derizioti.mp3" preload='auto'></audio>
+		<audio id="sound-6" src="./sounds/zaverdinos.mp3" preload='auto'></audio>
+	    <audio id="sound-7" src="./sounds/zarakovitis.mp3" preload='auto'></audio>
+	    <audio id="sound-8" src="./sounds/kossidoy.mp3" preload='auto'></audio>
+	    <audio id="sound-9" src="./sounds/lykoy.mp3" preload='auto'></audio>
+	    <audio id="sound-10" src="./sounds/lykoydi.mp3" preload='auto'></audio>			
+	    <audio id="sound-11" src="./sounds/marinos.mp3" preload='auto'></audio>
+	    <audio id="sound-12" src="./sounds/boykoyvala.mp3" preload='auto'></audio>
+	    <audio id="sound-13" src="./sounds/oikonomoy.mp3" preload='auto'></audio>
+	    <audio id="sound-14" src="./sounds/papapayloy.mp3" preload='auto'></audio>
+	    <audio id="sound-15" src="./sounds/spais.mp3" preload='auto'></audio>
+		<audio id="sound-16" src="./sounds/xaidogiannoy.mp3" preload='auto'></audio>
+	    <audio id="sound-17" src="./sounds/xalajoyka.mp3" preload='auto'></audio>
+	    <audio id="sound-18" src="./sounds/xaralabidi.mp3" preload='auto'></audio>
+	    <audio id="sound-19" src="./sounds/xlorokosta.mp3" preload='auto'></audio>
+	  </a-assets>
+	 
+
+      <a-sky color="lime"></a-sky>
+
+  <!-- Lighting -->
+      <a-light type="ambient" color="white"></a-light>
+      <a-light type="directional" intensity="0.1" position="0 10 0"></a-light>
+   
+
+  <!-- Ground Plane (visible) -->
+	  <a-plane position="1.481 0 0" rotation="-90 0 0" width="22" height="20" color="#D0A41A"></a-plane>
+	  
+  <!-- Nav Mesh (invisible but matches the plane ALMOST exactly) -->
+     <a-plane nav-mesh position="1.481 0 0" rotation="-90 0 0" width="21.5" height="19.5" visible="false"></a-plane> 
+
+
+  <!-- Ceiling -->
+	  <a-plane position="1.481 5 0" rotation="90 0 0" width="22" height="20" color="gray"></a-plane>
+
+  <!-- Map -->
+
+	  <a-plane id='map' class="clickable" src="./map.jpg" rotation="0 -90 0" scale="0.9 0.6 0.7" position="12.33685 2.56869 6.5984" width="3" height="3"></a-plane>
+      <a-text id='font5' font="./fonts/times-msdf.json"  color="black" negate="false" value="Click to change language"  position="12.33685 3.94795 5.37662" rotation="0 270 0" ></a-text>
+
+	  
+	<!-- Inner Walls -->
+	<a-box position="-9.519 1 0" depth="20" height="8" width="0.2" color="lightgray"></a-box>
+	<a-box position="12.481 1 0" depth="20" height="8" width="0.2" color="lightgray"></a-box>
+	<a-box position="1.481 1 -10" width="22" height="8" depth="0.2" color="lightgray"></a-box>
+	<a-box position="1.481 1 10" width="22" height="8" depth="0.2" color="lightgray"></a-box>
+
+	<!-- Outer Walls -->
+	<a-box position="-9.700 1 0" depth="20" height="8" width="0.2" color="lightgray"></a-box>
+	<a-box position="12.651 1 0" depth="20" height="8" width="0.2" color="lightgray"></a-box>
+	<a-box position="1.481 1 -10.2" width="22.4" height="8" depth="0.2" color="lightgray"></a-box>
+	<a-box position="1.481 1 10.2" width="22.4" height="8" depth="0.2" color="lightgray"></a-box>
+		 
+	 
+<a-entity id="ControlForObjects" position="2.856 0 -2.823"> 
+ 
+  <!--teachers desk-->  
+	  <a-obj-model position="6.26786 1.48647 -3.354" scale="0.6 0.5 0.6" rotation="0 -90 0"  src="#model3" mtl="#mtl3"></a-obj-model>
+	  
+  <!--teachers chair--> 
+      <a-obj-model position="7.61298 0.95228 -3.55314" scale="0.45 0.35 0.4" rotation="0 135 0" src="#model4" mtl="#mtl4"></a-obj-model>
+  
+  <!--board-->
+  <a-entity position="9.28517 2.51882 1.42632">
+	<a-obj-model  scale="0.018 0.018  0.018 " rotation="0 0 0" src="#model21" mtl="#mtl21"></a-obj-model>
+    <a-text id='font1' font="./fonts/times-msdf.json"  color="black" negate="false" value="Audio Books" position="0.002 1.52647 1.05" rotation="0 270 0" ></a-text>
+    <a-text id='font2' font="./fonts/times-msdf.json"  color="black" negate="false" value="Projects created as part of the 3rd semester course Sound Creation in Educational Applications, focusing on the sound enhancement of school curriculum units of Primary and Secondary Education."  position="0.002 0.63042 -1.27638" rotation="0 270 0"></a-text>
+    <a-text id='font3' font="./fonts/times-msdf.json"  color="black" negate="false" value="Instructor: Emmanouel Rovithis Virtual space development: Drosoula Mastrogianni, Marios Sotiropoulos"	 position="0.002 -0.45985 -1.29479" rotation="0 270 0"></a-text>
+	<a-text  id='font4' font="./fonts/times-msdf.json"  color="black" negate="false" value="Click on the books with your cursor to listen to the corresponding projects. Click on the fox-teacher to stop the audio."  position="0.002 -1.23631 -1.30855" rotation="0 270 0"></a-text>
+  </a-entity>
+  
+  
+  <!-- bookshelf -->
+	  <a-obj-model position="-12.111 1.55725 8.70071" scale="0.6 0.7 0.9" rotation="0 0 0" src="#model5" material="repeat: 25 1; src:./models/wood.png"></a-obj-model>
+
+
+  <!--right side of desks-->
+    <a-entity id="desk1-right" position='0 0 0'>
+	  <a-gltf-model position="3.66662 0.35 -2.67138" scale="1 0.9 1" rotation="0 -180 0" src="#model1"></a-gltf-model>
+	  <a-gltf-model position="2.15009 1.2 -3.53337" scale="0.1 0.1 0.1" rotation="0 -90 0" src="#model2"></a-gltf-model>  
+	  <a-gltf-model position="2.15009 1.2 -1.81786" scale="0.1 0.1 0.1" rotation="0 -90 0" src="#model2"></a-gltf-model> 
+
+     <!-- Βαπορακη -->
+	  <a-entity id="mybox1" class="clickable" position="3.71731 1.36003 -3.48437"> 
+	 <a-gltf-model  class="clickable" scale="0.004 0.004 0.004" src="#model6"></a-gltf-model>
+	   <a-sound src="#sound-1"></a-sound>  
+	   <a-text color=black style="font-weight: bold;" position="-0.5 1 0" value="'Οι Θεοί του Ολύμπου', δημιουργός: Στεφανία Βαποράκη" visible="false">  </a-text>
+	  </a-entity>
+	  
+     <!-- Βουλγαρη -->
+	  <a-entity id="mybox2" class="clickable" position="3.71731 1.36003 -1.74903">
+	  <a-gltf-model class="clickable" scale="0.004 0.004 0.004" src="#model6"></a-gltf-model>
+	   <a-sound src="#sound-2"></a-sound> 
+	   <a-text color=black style="font-weight: bold;" position="-0.5 1 0" value="'Ο Θεός Διόνυσος', δημιουργός: Παρασκευή Βούλγαρη" visible="false"> </a-text>	  
+	  </a-entity>
+	</a-entity>
+
+	 <a-entity id="desk2-right" position='-4.4 0 0'>
+		<a-gltf-model position="3.66662 0.35 -2.67138" scale="1 0.9 1" rotation="0 -180 0" src="#model1"></a-gltf-model>
+		<a-gltf-model position="2.15009 1.2 -3.53337" scale="0.1 0.1 0.1" rotation="0 -90 0" src="#model2"></a-gltf-model>  
+		<a-gltf-model position="2.15009 1.2 -1.81786" scale="0.1 0.1 0.1" rotation="0 -90 0" src="#model2"></a-gltf-model> 
+
+
+     <!-- Γιασλακιωτης -->
+	  <a-entity id="mybox3" class="clickable" position="3.68579 1.36003 -3.29663">
+	  <a-gltf-model class="clickable" scale="0.004 0.004 0.004" src="#model6"></a-gltf-model>
+	   <a-sound src="#sound-3"></a-sound>  
+	   <a-text color=black style="font-weight: bold;" position="-0.5 1 0" value="'Ο Ηρακλής, η Αρετή και η Κακία', δημιουργός: Ιωάννης Γιασλακιώτης" visible="false">  </a-text>
+	  </a-entity> 
+	  
+	 <!-- Γρηγορατος -->
+	  <a-entity id="mybox4" class="clickable" position="3.697 1.36003 -1.7567">
+	  <a-obj-model  class="clickable" scale="0.004 0.004 0.004" src="#model18" mtl="#mtl18"></a-obj-model>  
+	   <a-sound src="#sound-4"></a-sound> 
+	   <a-text color=black style="font-weight: bold;" position="-0.5 1 0" value="'Τέχνη και Τεχνολογία', δημιουργός: Αλέξανδρος - Ανδρέας Γρηγοράτος, αφήγηση: Μαρία - Νεφελη Γρηγοράτου" visible="false"> </a-text>
+	  </a-entity>		
+	 </a-entity>
+	   
+	   
+	  <a-entity id="desk3-right" position='-8.4 0 0'>
+		<a-gltf-model position="3.66662 0.35 -2.67138" scale="1 0.9 1" rotation="0 -180 0" src="#model1"></a-gltf-model>
+		<a-gltf-model position="2.15009 1.2 -3.53337" scale="0.1 0.1 0.1" rotation="0 -90 0" src="#model2"></a-gltf-model>  
+		<a-gltf-model position="2.15009 1.2 -1.81786" scale="0.1 0.1 0.1" rotation="0 -90 0" src="#model2"></a-gltf-model> 
+		
+	 <!-- Δεριζιωτη -->
+	  <a-entity id="mybox5" class="clickable" position="3.634 1.36003 -3.48437">
+	   <a-gltf-model  class="clickable" scale="0.004 0.004 0.004" src="#model8"></a-gltf-model>
+	   <a-sound src="#sound-5"></a-sound>  
+	   <a-text color=black style="font-weight: bold;" position="-0.5 1 0" value="'Νίκος Καββαδίας Πούσι', δημιουργός: Φαίδρα Δεριζιώτη" visible="false">  </a-text>
+	  </a-entity>
+	  
+	 <!-- Ζαβερδινος -->
+	  <a-entity id="mybox6" class="clickable" position="3.634 1.36003 -1.74903">
+	  <a-gltf-model  class="clickable" scale="0.004 0.004 0.004" src="#model7"></a-gltf-model>
+	   <a-sound src="#sound-6"></a-sound> 
+	   <a-text color=black style="font-weight: bold;" position="-0.5 1 0" value="'Οδύσσεια', δημιουργός: Χριστόφορος Ζαβερδινός" visible="false"> </a-text>
+	  </a-entity>		
+	 </a-entity>
+
+
+  <!--middle side of desks-->
+	 <a-entity id="desk1-middle" position="0 0 5.57779">
+		<a-gltf-model position="3.66662 0.35 -2.67138" scale="1 0.9 1" rotation="0 -180 0" src="#model1"> </a-gltf-model>
+		<a-gltf-model position="2.15009 1.2 -3.53337" scale="0.1 0.1 0.1" rotation="0 -90 0" src="#model2"></a-gltf-model>  
+		<a-gltf-model position="2.15009 1.2 -1.81786" scale="0.1 0.1 0.1" rotation="0 -90 0" src="#model2"></a-gltf-model>  
+	   
+	 <!-- Ζαρακοβιτης --> 
+	  <a-entity id="mybox7" class="clickable" position="3.694 1.36003 -3.48437">
+	   <a-gltf-model  class="clickable"  scale="0.004 0.004 0.004" src="#model6"> </a-gltf-model>
+	   <a-sound src="#sound-7"></a-sound>  
+	   <a-text color=black style="font-weight: bold;" position="-0.5 1 0" value="'Απο τη Μυθολογία στην Ιστορία', δημιουργός: Αλέξανδρος Ζαρακοβίτης" visible="false">  </a-text>
+	  </a-entity>
+	  
+	 <!-- Κοσσιδου --> 
+	  <a-entity id="mybox8" class="clickable" position="3.694 1.36003 -1.74903">
+	  <a-obj-model class="clickable" scale="0.004 0.004 0.004" src="#model19" mtl="#mtl19"> </a-obj-model>  
+	   <a-sound src="#sound-8"></a-sound> 
+	   <a-text color=black style="font-weight: bold;" position="-0.5 1 0" value="'Παιδί και Φύση', δημιουργός: Αγάπη Κοσσίδου" visible="false"> </a-text>
+	  </a-entity>
+	 </a-entity>
+
+
+	   <a-entity id="desk2-middle" position="-4.4 0 5.57779">
+		<a-gltf-model position="3.66662 0.35 -2.67138" scale="1 0.9 1" rotation="0 -180 0" src="#model1"></a-gltf-model>
+		<a-gltf-model position="2.15009 1.2 -3.53337" scale="0.1 0.1 0.1" rotation="0 -90 0" src="#model2"></a-gltf-model>  
+		<a-gltf-model position="2.15009 1.2 -1.81786" scale="0.1 0.1 0.1" rotation="0 -90 0" src="#model2"></a-gltf-model>  
+	
+	 <!-- Λυκου --> 	
+	 <a-entity id="mybox9" class="clickable" position="3.694 1.36003 -3.48437">
+	  <a-obj-model class="clickable" scale="0.004 0.004 0.004" src="#model9" mtl="#mtl9"> </a-obj-model> 
+	   <a-sound src="#sound-9"></a-sound>  
+	   <a-text color=black style="font-weight: bold;" position="-0.5 1 0" value="'Ο μικρός Πρίγκιπας και η αλεπού', δημιουργός: Γεωργία Λύκου" visible="false">  </a-text>
+	 </a-entity>
+	  
+	  <!-- Λυκουδη --> 
+	  <a-entity id="mybox10" class="clickable" position="3.694 1.36003 -1.74903">
+	  <a-gltf-model  class="clickable" scale="0.004 0.004 0.004" src="#model6"> </a-gltf-model>  
+	   <a-sound src="#sound-10"></a-sound> 
+	   <a-text color=black style="font-weight: bold;" position="-0.5 1 0" value="'Οι Θεοί του Ολύμπου', δημιουργός: Ευθυμία Λυκούδη" visible="false"> </a-text>
+	  </a-entity>
+	 </a-entity>
+
+
+	   <a-entity id="desk3-middle" position="-8.4 0 5.57779">
+		<a-gltf-model position="3.66662 0.35 -2.67138" scale="1 0.9 1" rotation="0 -180 0" src="#model1"></a-gltf-model>
+		<a-gltf-model position="2.15009 1.2 -3.53337" scale="0.1 0.1 0.1" rotation="0 -90 0" src="#model2"></a-gltf-model>  
+		<a-gltf-model position="2.15009 1.2 -1.81786" scale="0.1 0.1 0.1" rotation="0 -90 0" src="#model2"></a-gltf-model>  
+	   
+	<!-- Μαρινος --> 	
+	 <a-entity id="mybox11" class="clickable" position="3.694 1.36003 -3.48437">
+	  <a-obj-model class="clickable" scale="0.004 0.004 0.004" src="#model10" mtl="#mtl10"> </a-obj-model> 
+	   <a-sound src="#sound-11"></a-sound>  
+	   <a-text color=black style="font-weight: bold;" position="-0.5 1 0" value="'Απο το Γκόσπελ στο Ροκ', δημιουργός: Αντώνης Μαρίνος" visible="false">  </a-text>
+	  </a-entity>
+	  	  
+	 <!-- Μπουκουβαλα --> 
+	  <a-entity id="mybox12" class="clickable" position="3.694 1.36003 -1.74903">
+	  <a-obj-model  class="clickable" scale="0.004 0.004 0.004" src="#model17" mtl="#mtl17"> </a-obj-model> 
+	   <a-sound src="#sound-12"></a-sound> 
+	   <a-text color=black style="font-weight: bold;" position="-0.5 1 0" value="'Ήχος', δημιουργός: Σταυρούλα Μπουκουβάλα" visible="false"> </a-text>
+	   </a-entity>
+	 </a-entity>
+	   
+	 <a-entity id="desk4-middle" position="-12.4 0 5.57779">
+		<a-gltf-model position="3.66662 0.35 -2.67138" scale="1 0.9 1" rotation="0 -180 0" src="#model1"></a-gltf-model>
+		<a-gltf-model position="2.15009 1.2 -3.53337" scale="0.1 0.1 0.1" rotation="0 -90 0" src="#model2"></a-gltf-model>  
+		<a-gltf-model position="2.15009 1.2 -1.81786" scale="0.1 0.1 0.1" rotation="0 -90 0" src="#model2"></a-gltf-model>  
+	   
+	 <!-- Οικονομου --> 
+	   <a-entity id="mybox13" class="clickable" position="3.694 1.36003 -2.6906">
+	   <a-obj-model class="clickable" scale="0.004 0.004 0.004" src="#model11" mtl="#mtl11"> </a-obj-model> 
+	    <a-sound src="#sound-13"></a-sound>  
+	    <a-text color=black style="font-weight: bold;" position="-0.5 1 0" value="'Νάνος Βαλαωρίτης: Μικρός Θρήνος', δημιουργός: Κωνσταντίνος - Ερνέστο Οικονόμου" visible="false">  </a-text>
+	   </a-entity>
+	 </a-entity>
+
+	   
+   <!--left side of desks-->
+	 <a-entity id="desk1-left" position="0 0 11.15558">
+		<a-gltf-model position="3.66662 0.35 -2.67138" scale="1 0.9 1" rotation="0 -180 0" src="#model1"></a-gltf-model>
+		<a-gltf-model position="2.15009 1.2 -3.53337" scale="0.1 0.1 0.1" rotation="0 -90 0" src="#model2"></a-gltf-model>  
+		<a-gltf-model position="2.15009 1.2 -1.81786" scale="0.1 0.1 0.1" rotation="0 -90 0" src="#model2"></a-gltf-model>  
+	
+	 <!-- Παπαπαυλου --> 	
+	 <a-entity id="mybox14" class="clickable" position="3.694 1.36003 -3.48437">
+	  <a-obj-model class="clickable" scale="0.004 0.004 0.004" src="#model12" mtl="#mtl12"> </a-obj-model>  
+	   <a-sound src="#sound-14"></a-sound>  
+	   <a-text color=black style="font-weight: bold;" position="-0.5 1 0" value="'Ζωή Βαλάση: Όπου η Τρελούτσικη γίνεται ένας ήλιος αρμυρός, ήλιος θαλασσινός', δημιουργός: Χριστίνα Παπαπαύλου, αφήγηση: Θάνος Τσαβουσέλης" visible="false">  </a-text>
+	  </a-entity>
+	  	  	  
+	 <!-- Σπαης --> 
+	  <a-entity id="mybox15" class="clickable" position="3.694 1.36003 -1.74903">
+	  <a-gltf-model class="clickable" scale="0.004 0.004 0.004" src="#model6"> </a-gltf-model>  
+	   <a-sound src="#sound-15"></a-sound> 
+	   <a-text color=black style="font-weight: bold;" position="-0.5 1 0" value="'Ο Μέγας Αλέξανδρος και η Εκστρατεία του', δημιουργός: Γιώργος Σπαής" visible="false"> </a-text>
+	  </a-entity>
+	 </a-entity>
+
+	   <a-entity id="desk2-left" position="-4.4 0 11.15558">
+		<a-gltf-model position="3.66662 0.35 -2.67138" scale="1 0.9 1" rotation="0 -180 0" src="#model1"></a-gltf-model>
+		<a-gltf-model position="2.15009 1.2 -3.53337" scale="0.1 0.1 0.1" rotation="0 -90 0" src="#model2"></a-gltf-model>  
+		<a-gltf-model position="2.15009 1.2 -1.81786" scale="0.1 0.1 0.1" rotation="0 -90 0" src="#model2"></a-gltf-model>  
+	   	
+    <!-- Χαιδογιαννου --> 	
+	  <a-entity id="mybox16" class="clickable" position="3.694 1.36003 -3.48437">
+	   <a-obj-model class="clickable" scale="0.004 0.004 0.004" src="#model13" mtl="#mtl13"> </a-obj-model>
+	    <a-sound src="#sound-16"></a-sound>  
+	    <a-text color=black style="font-weight: bold;" position="-0.5 1 0" value="'Ήχος', δημιουργός: Δέσποινα Χαϊδόγιαννου" visible="false">  </a-text>
+	  </a-entity>
+	  	
+     <!-- Χαλαζουκα --> 
+	  <a-entity id="mybox17" class="clickable" position="3.694 1.36003 -1.74903">
+	  <a-obj-model  class="clickable" scale="0.004 0.004 0.004" src="#model14" mtl="#mtl14"> </a-obj-model> 
+	   <a-sound src="#sound-17"></a-sound> 
+	   <a-text color=black style="font-weight: bold;" position="-0.5 1 0" value="'Η Παρέα', δημιουργός: Στέλλα Χαλατζούκα" visible="false"> </a-text>
+	  </a-entity>
+	 </a-entity>
+
+	   <a-entity id="desk3-left" position="-8.4 0 11.15558">
+		<a-gltf-model position="3.66662 0.35 -2.67138" scale="1 0.9 1" rotation="0 -180 0" src="#model1"></a-gltf-model>
+		<a-gltf-model position="2.15009 1.2 -3.53337" scale="0.1 0.1 0.1" rotation="0 -90 0" src="#model2"></a-gltf-model>  
+		<a-gltf-model position="2.15009 1.2 -1.81786" scale="0.1 0.1 0.1" rotation="0 -90 0" src="#model2"></a-gltf-model>  
+	   	   	
+    <!-- Χαραλαμπιδη  --> 	
+	  <a-entity id="mybox18" class="clickable" position="3.694 1.36003 -3.48437">
+	  <a-obj-model  class="clickable" scale="0.004 0.004 0.004" src="#model15" mtl="#mtl15"> </a-obj-model>
+	   <a-sound src="#sound-18"></a-sound>  
+	   <a-text color=black style="font-weight: bold;" position="-0.5 1 0" value="'Η Γη ως Ουράνιο Σώμα', δημιουργός: Αλεξάνδρα Χαραλαμπίδη" visible="false">  </a-text>
+	  </a-entity>
+	  	  	
+     <!-- Χλωροκωστα --> 
+	  <a-entity id="mybox19" class="clickable" position="3.694 1.36003 -1.74903">
+	  <a-obj-model  class="clickable" scale="0.004 0.004 0.004" src="#model16" mtl="#mtl16"> </a-obj-model>
+	   <a-sound src="#sound-19"></a-sound> 
+	   <a-text color=black style="font-weight: bold;" position="-0.5 1 0" value="'To Μηχάνημα', δημιουργός: Μαρία Χλωροκώστα" visible="false"> </a-text>
+	  </a-entity>
+	 </a-entity>
+	   
+</a-entity>
+
+
+<!-- Global Sound Stopper Cube -->
+<a-entity id="soundStopper" position="10.30675 1.91407 -6.12374" class="clickable"> 
+	<a-obj-model  class="clickable" position="-0.214 0.47073 0.67431" rotation="0 180 0" scale="0.005 0.005 0.005" src="#model20" mtl="#mtl20"> </a-obj-model>
+ <!-- <a-box class="clickable" color="black" depth="0.5" height="0.5" width="0.5"></a-box>-->
+</a-entity>
+
+  
+    <!-- Player -->
+      <a-entity id="rig" movement-controls="constrainToNavMesh: true; speed: 0.5;" position="0 0 0">
+        <a-entity id="camera"
+                  camera
+                  position="0 1.7 0"
+                  look-controls="pointerLockEnabled: true">
+           <a-cursor position="0 0 -0.3" scale="0.35 0.35 0.35" fuse="false" raycaster="objects: .clickable"></a-cursor>
+        </a-entity>
+      </a-entity>
+	  
+    </a-scene>
+	
+
+
+<!-- LOCAL AUTO RELOAD
+<script>
+   window.addEventListener('DOMContentLoaded', () => {
+     const url = new URL(window.location);
+     const hasReloaded = url.searchParams.get("reloaded");
+
+     if (!hasReloaded) {setTimeout(() => {
+          url.searchParams.set("reloaded", "true");
+          window.location.href = url.toString();
+                                         }, 3000);
+                       }
+                                                     });
+</script> -->
+
+<script>
+if (!sessionStorage.getItem('hasReloaded')) {
+    sessionStorage.setItem('hasReloaded', 'true');
+    setTimeout(function() {
+        location.reload();
+    }, 3000);
+}
+</script> 
+
+<script>
+	var Thebooks = [];
+	for (var i = 1; i <= 19; i++) 
+	 {
+	  Thebooks[i] = document.getElementById('mybox' + i);
+	 }
+</script>
+
+
+<!-- SCRIPT TO STOP ANY SOUNDS PLAYING OR LOADING TO BE PLAYED AUTOMATICALLY -->
+<script>
+ var overlay = document.getElementById('overlay');
+
+ 
+  window.addEventListener('load', () => {
+    const sceneEl = document.querySelector('a-scene');
+
+    sceneEl.addEventListener('loaded', () => {
+	console.log('load complete');
+      const stopper = document.getElementById('soundStopper');
+
+      stopper.addEventListener('click', () => {
+        sceneEl.querySelectorAll('[sound]').forEach(el => {
+          const sound = el.components.sound;
+          if (sound && (sound.isPlaying || sound.source)) {
+            try {
+              sound.stopSound();
+              sound.source?.stop?.();
+            } catch (e) {
+              console.warn("Error stopping sound:", e);
+            }
+          }
+        });
+
+        console.log("All audio stopped.");
+	  overlay.style.display = 'block'; // Show the UI
+      overlay.textContent = 'AUDIO STOPPED'; 
+      });
+    });
+  });
+</script>
+
+
+
+<script>
+   var currentlyPlayingSound = null;
+   var currentlyVisibleText = null;
+   var currentlyVisibleArrow = null;
+   var overlay = document.getElementById('overlay');
+    
+   for (var i = 1; i <= 19; i++) 
+   {
+    if (Thebooks[i]) 
+	{
+      Thebooks[i].addEventListener('click', function () {
+        
+	 // message to see what was clicked
+	  console.log('You clicked: ' + this.id);
+		
+     // Stop any currently playing sound
+      if (currentlyPlayingSound && currentlyPlayingSound.components.sound.isPlaying) 
+	  {
+        currentlyPlayingSound.components.sound.stopSound();
+      }
+
+     // Hide any visible text
+      if (currentlyVisibleText) 
+	  {
+        currentlyVisibleText.setAttribute('visible', false);
+      }
+	  
+	 // Hide any visible arrow
+      if (currentlyVisibleArrow) 
+	  {
+        currentlyVisibleArrow.setAttribute('visible', false); 
+      }
+
+     // Play sound when clicked
+      var sound = this.querySelector('a-sound');
+      if (sound) 
+	  {
+        sound.components.sound.playSound();
+        currentlyPlayingSound = sound; // current sound 
+		
+		 // Listen for when the sound ends
+        sound.addEventListener('sound-ended', function() 
+		     {
+              overlay.style.display = 'none'; // Hide the overlay when the sound ends
+             });
+      }
+		
+     // Show text when clicked
+	  var text = this.querySelector('a-text');
+	  if (text) 
+	  {
+		text.setAttribute('visible', false);
+        currentlyVisibleText = text; // current text that is visible
+	  }
+		
+	// Create and show the arrow above the clicked box
+        var arrow = document.createElement('a-entity');
+        arrow.setAttribute('geometry', {primitive: 'cone', radiusBottom: 0.3, height: 0.6});
+        arrow.setAttribute('material', {color: 'lime'});
+        arrow.setAttribute('position', {x: text.object3D.position.x + 0.5, y: text.object3D.position.y + 0.4, z: text.object3D.position.z});
+		arrow.setAttribute('rotation', {x: 180, y: 0, z: 0}); // Rotate arrow to point downwards
+        this.appendChild(arrow);
+	    currentlyVisibleArrow = arrow; // current arrow that is visible
+
+     // Show the UI with the message from the selected text 
+      overlay.style.display = 'block'; // Show the UI
+      overlay.textContent = text.getAttribute('value'); 
+		
+     });
+    }
+   }
+</script>
+
+<script>	
+var text1=document.getElementById('font1');
+var text2=document.getElementById('font2');
+var text3=document.getElementById('font3');
+var text4=document.getElementById('font4');
+var text5=document.getElementById('font5');
+var cube = document.getElementById('map');
+var greek=true;
+
+ cube.addEventListener('click', function() 
+		     {
+				if(greek==true)
+			 {
+              text1.setAttribute('value','Ηχητικά Βιβλία');
+			  text2.setAttribute('value','Έργα που δημιουργήθηκαν στο πλαίσιο του μαθήματος Γ’ εξαμήνου “Ηχητική Δημιουργία σε Εκπαιδευτικές Εφαρμογές” με θέμα την ηχητική απόδοση και επένδυση Ενοτήτων από τη σχολική διδακτέα ύλη Α’ και Β’θμιας εκπαίδευσης.');
+              text3.setAttribute('value','Διδάσκων: Εμμανουήλ Ροβίθης Υλοποίηση εικονικού χώρου: Δροσούλα Μαστρογιάννη, Μάριος Σωτηρόπουλος');
+              text4.setAttribute('value','Κάντε κλικ με τον κέρσορα στα βιβλία για να ακούσετε τα αντίστοιχα έργα. Κλικ στην αλεπού-καθηγητή σταματάει τον ήχο.');
+			  text5.setAttribute('value','Kλικ για να αλλάξετε γλώσσα');
+			  greek=false;
+			}
+			 else if(greek==false)
+	         {
+              text1.setAttribute('value','Audio Books');
+			  text2.setAttribute('value','Projects created as part of the 3rd semester course "Sound Creation in Educational Applications", focusing on the sound enhancement of school curriculum units of Primary and Secondary Education.');
+              text3.setAttribute('value','Instructor: Emmanouel Rovithis Virtual space development: Drosoula Mastrogianni, Marios Sotiropoulos');
+              text4.setAttribute('value','Click on the books with your cursor to listen to the corresponding projects. Click on the fox-teacher to stop the audio.');
+			  text5.setAttribute('value','Click to change language');
+			  greek=true;
+			}
+             });
+
+</script>
+<script>
+            var move_cam= document.getElementById("rig");
+            var move_cam3D= move_cam.object3D;
+            var rot_cam3D=move_cam.object3D;
+           const  worldRot= new THREE.Quaternion();
+            const worldPos = new THREE.Vector3();
+            const angle = THREE.MathUtils.degToRad(1);  
+            function forward() {
+              interval_a = setInterval(function() {
+                move_cam3D.getWorldPosition(worldPos);
+                const localPos = move_cam3D.worldToLocal(worldPos.clone());
+                localPos.z -= 0.2;
+          
+                const newWorldPos = move_cam3D.localToWorld(localPos);
+                move_cam3D.position.set(newWorldPos.x, 0, newWorldPos.z );
+                },50);
+              }
+              
+              function backward(){
+                interval_b = setInterval(function() {
+                move_cam3D.getWorldPosition(worldPos);
+                const localPos = move_cam3D.worldToLocal(worldPos.clone());
+                localPos.z += 0.2;
+          
+                const newWorldPos = move_cam3D.localToWorld(localPos);
+                move_cam3D.position.set(newWorldPos.x,   0, newWorldPos.z );
+                },50);
+              }
+              function right(){
+                interval_d = setInterval(function() {
+                  var rig= document.getElementById("rig");
+                  let currentRotation = rig.getAttribute('rotation');
+                  rig.setAttribute('rotation', {
+                       x: currentRotation.x,
+                       y: currentRotation.y - 3,
+                       z: currentRotation.z
+                      });
+
+                  // move_cam3D.position.set(newWorldPos.x, newWorldPos.y, newWorldPos.z );
+//              move_cam3D.rotateOnAxis(new THREE.Vector3(0, 1, 0), -angle); // Rotates around Y-axis
+              //move_cam3D.rotation.set(newWorldPos.x, newWorldPos.y, newWorldPos.z );
+                },50);
+              }
+              function left(){
+                interval_c = setInterval(function() {
+                  var rig= document.getElementById("rig");
+                  let currentRotation = rig.getAttribute('rotation');
+                  rig.setAttribute('rotation', {
+                       x: currentRotation.x,
+                       y: currentRotation.y + 3,
+                       z: currentRotation.z
+                      });
+                },50);
+              }
+              function clear_a(){
+                clearInterval(interval_a);
+              }
+              function clear_b(){
+                clearInterval(interval_b);
+              }
+              function clear_c(){
+                clearInterval(interval_c);
+              }
+              function clear_d(){
+                clearInterval(interval_d);
+              }
+              </script>
+</script>
+      <script>
+        var a=  document.getElementById("toggleButton1");
+        var b=  document.getElementById("toggleButton2");
+        var c=  document.getElementById("toggleButton3");
+        var d=  document.getElementById("toggleButton4");
+
+function isMobile() {
+    const regex = /Mobi|Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
+    return regex.test(navigator.userAgent);
+  
+   }
+  if (isMobile()) {
+    console.log("Mobile");
+    a.style.display = "block";
+    b.style.display = "block";
+    c.style.display = "block";
+    d.style.display = "block";
+  } else {
+    console.log("Desktop");
+
+/* For Debugging Purposes
+	a.style.display = "block";
+    b.style.display = "block";
+    c.style.display = "block";
+    d.style.display = "block";*/
+	
+    a.style.display = "none";
+    b.style.display = "none";
+    c.style.display = "none";
+    d.style.display = "none";
+
+  }
+  
+
+            </script> 
+  </body>
+</html>
