@@ -10,9 +10,15 @@
   <!-- aframe-extras 6.1.1 FOR NAV MESH -->
   <script type="text/JavaScript" src="./aframe-extras.min.js"></script>
   
+  <!-- libraries for Oculus Quest controllers -->
+  <script src="oculus-thumbstick-controls.js"> </script>
+  <script src="aframe-locomotion.js"> </script>
+  
+  
     <!-- style for the UI -->
   	 <style>
-        #overlay {
+        #overlay 
+		{
             position: absolute;
             top: 10%; 
             left: 50%;
@@ -25,74 +31,119 @@
             display: none; 
 			z-index: 9999;
         }
-		/*right button*/
-		#toggleButton1 {
-        position: absolute;
-        bottom: 20px;
-       /* left: 150px; */
-      	right: 150px;
-        padding: 20px 20px;
-        font-size: 16px;
-        background-color: #7e70ec;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        z-index: 10; 
-      }
+		
+		#warningDiv 
+		{
+            position: absolute;
+            top: 35%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            display: none;
+            text-align: center;
+            font-size: 20px;
+            z-index: 9999;
+        }
+
+        #countdown 
+		{
+            display: block;
+            font-size: 45px;
+            transition: all 0.3s ease;
+        }
+
+        .countdown-warning 
+		{
+            color: red;
+        }
+		
+		
+	  /*right button*/
+		#toggleButton1 
+		{
+            position: absolute;
+            bottom: 20px;
+            /* left: 150px; */
+         	right: 150px;
+            padding: 20px 20px;
+            font-size: 16px;
+            background-color: #7e70ec;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 10; 
+        }
+	  
 	  /*left button*/
-      #toggleButton2 {
-        position: absolute;
-        bottom: 20px;
-     	right: 300px; /*250*/
-       /* left: 50px;*/
-        padding: 20px 20px;
-        font-size: 16px;
-        background-color: #7e70ec;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        z-index: 10; 
-      }
+        #toggleButton2 
+		{
+            position: absolute;
+            bottom: 20px;
+     	    right: 300px; /*250*/
+            /* left: 50px;*/
+            padding: 20px 20px;
+            font-size: 16px;
+            background-color: #7e70ec;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 10; 
+         }
+	  
 	  /*backward button*/
-      #toggleButton3 {
-        position: absolute;
-        bottom: 20px;
-     /* right: 200px;*/
-        left: 100px;
-        padding: 20px 20px;
-        font-size: 16px;
-        background-color: #7e70ec;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        z-index: 10; 
-      }
+         #toggleButton3 
+		 {
+            position: absolute;
+            bottom: 20px;
+            /* right: 200px;*/
+            left: 100px;
+            padding: 20px 20px;
+            font-size: 16px;
+            background-color: #7e70ec;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 10; 
+         }
+	  
 	  /*front button*/
-      #toggleButton4 {
-        position: absolute;
-        bottom: 150px; /* 70*/
-     /* right: 200px;*/
-        left: 100px;
-        padding: 20px 20px;
-        font-size: 16px;
-        background-color: #7e70ec;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        z-index: 10; 
-          }
+         #toggleButton4 
+	     {
+            position: absolute;
+            bottom: 150px; /* 70*/
+            /* right: 200px;*/
+            left: 100px;
+            padding: 20px 20px;
+            font-size: 16px;
+            background-color: #7e70ec;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 10; 
+         } 	  	 
     </style>
 	
   </head>
   
   <body>
-    <!-- UI -->
+   <!-- UI -->
     <div id="overlay"> </div>
 	
+   <!-- Inactivity Warning div -->
+	<div id="warningDiv">
+      Dear user, please move or you will be redirected due to inactivity!
+      <br> <br>
+      <span id="countdown">10</span>
+    </div>
+	
+   <!-- mobile movement buttons -->
  	<button hide-on-enter-vr id="toggleButton1" ontouchstart="right()"  ontouchend="clear_d()"  ontouchcancel="clear_d()" onmousedown="right()"  onmouseup="clear_d()" ></button>
 	<button hide-on-enter-vr id="toggleButton2" ontouchstart=" left()"  ontouchend="clear_c()"  ontouchcancel="clear_c()" onmousedown=" left()"  onmouseup="clear_c()" ></button>
     <button hide-on-enter-vr id="toggleButton3" ontouchstart="backward()"  ontouchend="clear_b()" ontouchcancel="clear_b()" onmousedown="backward()" onmouseup="clear_b()"></button>
@@ -208,7 +259,7 @@
 
   <!-- Map -->
 
-	  <a-plane id='map' class="clickable" src="./map.jpg" rotation="0 -90 0" scale="0.9 0.6 0.7" position="12.33685 2.56869 6.5984" width="3" height="3"></a-plane>
+	  <a-plane cursor-events  id='map' class="clickable" src="./map.jpg" rotation="0 -90 0" scale="0.9 0.6 0.7" position="12.33685 2.56869 6.5984" width="3" height="3"></a-plane>
       <a-text id='font5' font="./fonts/times-msdf.json"  color="black" negate="false" value="Click to change language"  position="12.33685 3.94795 5.37662" rotation="0 270 0" ></a-text>
 
 	  
@@ -254,15 +305,15 @@
 	  <a-gltf-model position="2.15009 1.2 -1.81786" scale="0.1 0.1 0.1" rotation="0 -90 0" src="#model2"></a-gltf-model> 
 
      <!-- Βαπορακη -->
-	  <a-entity id="mybox1" class="clickable" position="3.71731 1.36003 -3.48437"> 
-	 <a-gltf-model  class="clickable" scale="0.004 0.004 0.004" src="#model6"></a-gltf-model>
+	  <a-entity cursor-events id="mybox1" class="clickable" position="3.71731 1.36003 -3.48437"> 
+	 <a-gltf-model cursor-events  id="mybox1.1" class="clickable" scale="0.004 0.004 0.004" src="#model6"></a-gltf-model>
 	   <a-sound src="#sound-1"></a-sound>  
 	   <a-text color=black style="font-weight: bold;" position="-0.5 1 0" value="'Οι Θεοί του Ολύμπου', δημιουργός: Στεφανία Βαποράκη" visible="false">  </a-text>
 	  </a-entity>
 	  
      <!-- Βουλγαρη -->
-	  <a-entity id="mybox2" class="clickable" position="3.71731 1.36003 -1.74903">
-	  <a-gltf-model class="clickable" scale="0.004 0.004 0.004" src="#model6"></a-gltf-model>
+	  <a-entity cursor-events  id="mybox2" class="clickable" position="3.71731 1.36003 -1.74903">
+	  <a-gltf-model cursor-events  id="mybox2.1" class="clickable" scale="0.004 0.004 0.004" src="#model6"></a-gltf-model>
 	   <a-sound src="#sound-2"></a-sound> 
 	   <a-text color=black style="font-weight: bold;" position="-0.5 1 0" value="'Ο Θεός Διόνυσος', δημιουργός: Παρασκευή Βούλγαρη" visible="false"> </a-text>	  
 	  </a-entity>
@@ -275,15 +326,15 @@
 
 
      <!-- Γιασλακιωτης -->
-	  <a-entity id="mybox3" class="clickable" position="3.68579 1.36003 -3.29663">
-	  <a-gltf-model class="clickable" scale="0.004 0.004 0.004" src="#model6"></a-gltf-model>
+	  <a-entity cursor-events id="mybox3" class="clickable" position="3.68579 1.36003 -3.29663">
+	  <a-gltf-model cursor-events  id="mybox3.1" class="clickable" scale="0.004 0.004 0.004" src="#model6"></a-gltf-model>
 	   <a-sound src="#sound-3"></a-sound>  
 	   <a-text color=black style="font-weight: bold;" position="-0.5 1 0" value="'Ο Ηρακλής, η Αρετή και η Κακία', δημιουργός: Ιωάννης Γιασλακιώτης" visible="false">  </a-text>
 	  </a-entity> 
 	  
 	 <!-- Γρηγορατος -->
-	  <a-entity id="mybox4" class="clickable" position="3.697 1.36003 -1.7567">
-	  <a-obj-model  class="clickable" scale="0.004 0.004 0.004" src="#model18" mtl="#mtl18"></a-obj-model>  
+	  <a-entity cursor-events  id="mybox4" class="clickable" position="3.697 1.36003 -1.7567">
+	  <a-obj-model cursor-events  id="mybox4.1" class="clickable" scale="0.004 0.004 0.004" src="#model18" mtl="#mtl18"></a-obj-model>  
 	   <a-sound src="#sound-4"></a-sound> 
 	   <a-text color=black style="font-weight: bold;" position="-0.5 1 0" value="'Τέχνη και Τεχνολογία', δημιουργός: Αλέξανδρος - Ανδρέας Γρηγοράτος, αφήγηση: Μαρία - Νεφελη Γρηγοράτου" visible="false"> </a-text>
 	  </a-entity>		
@@ -296,15 +347,15 @@
 		<a-gltf-model position="2.15009 1.2 -1.81786" scale="0.1 0.1 0.1" rotation="0 -90 0" src="#model2"></a-gltf-model> 
 		
 	 <!-- Δεριζιωτη -->
-	  <a-entity id="mybox5" class="clickable" position="3.634 1.36003 -3.48437">
-	   <a-gltf-model  class="clickable" scale="0.004 0.004 0.004" src="#model8"></a-gltf-model>
+	  <a-entity cursor-events  id="mybox5" class="clickable" position="3.634 1.36003 -3.48437">
+	   <a-gltf-model cursor-events id="mybox5.1" class="clickable" scale="0.004 0.004 0.004" src="#model8"></a-gltf-model>
 	   <a-sound src="#sound-5"></a-sound>  
 	   <a-text color=black style="font-weight: bold;" position="-0.5 1 0" value="'Νίκος Καββαδίας Πούσι', δημιουργός: Φαίδρα Δεριζιώτη" visible="false">  </a-text>
 	  </a-entity>
 	  
 	 <!-- Ζαβερδινος -->
-	  <a-entity id="mybox6" class="clickable" position="3.634 1.36003 -1.74903">
-	  <a-gltf-model  class="clickable" scale="0.004 0.004 0.004" src="#model7"></a-gltf-model>
+	  <a-entity  cursor-events  id="mybox6" class="clickable" position="3.634 1.36003 -1.74903">
+	  <a-gltf-model cursor-events  id="mybox6.1" class="clickable" scale="0.004 0.004 0.004" src="#model7"></a-gltf-model>
 	   <a-sound src="#sound-6"></a-sound> 
 	   <a-text color=black style="font-weight: bold;" position="-0.5 1 0" value="'Οδύσσεια', δημιουργός: Χριστόφορος Ζαβερδινός" visible="false"> </a-text>
 	  </a-entity>		
@@ -318,15 +369,15 @@
 		<a-gltf-model position="2.15009 1.2 -1.81786" scale="0.1 0.1 0.1" rotation="0 -90 0" src="#model2"></a-gltf-model>  
 	   
 	 <!-- Ζαρακοβιτης --> 
-	  <a-entity id="mybox7" class="clickable" position="3.694 1.36003 -3.48437">
-	   <a-gltf-model  class="clickable"  scale="0.004 0.004 0.004" src="#model6"> </a-gltf-model>
+	  <a-entity cursor-events  id="mybox7" class="clickable" position="3.694 1.36003 -3.48437">
+	   <a-gltf-model cursor-events  id="mybox7.1" class="clickable"  scale="0.004 0.004 0.004" src="#model6"> </a-gltf-model>
 	   <a-sound src="#sound-7"></a-sound>  
 	   <a-text color=black style="font-weight: bold;" position="-0.5 1 0" value="'Απο τη Μυθολογία στην Ιστορία', δημιουργός: Αλέξανδρος Ζαρακοβίτης" visible="false">  </a-text>
 	  </a-entity>
 	  
 	 <!-- Κοσσιδου --> 
-	  <a-entity id="mybox8" class="clickable" position="3.694 1.36003 -1.74903">
-	  <a-obj-model class="clickable" scale="0.004 0.004 0.004" src="#model19" mtl="#mtl19"> </a-obj-model>  
+	  <a-entity cursor-events id="mybox8" class="clickable" position="3.694 1.36003 -1.74903">
+	  <a-obj-model cursor-events  id="mybox8.1" class="clickable" scale="0.004 0.004 0.004" src="#model19" mtl="#mtl19"> </a-obj-model>  
 	   <a-sound src="#sound-8"></a-sound> 
 	   <a-text color=black style="font-weight: bold;" position="-0.5 1 0" value="'Παιδί και Φύση', δημιουργός: Αγάπη Κοσσίδου" visible="false"> </a-text>
 	  </a-entity>
@@ -339,15 +390,15 @@
 		<a-gltf-model position="2.15009 1.2 -1.81786" scale="0.1 0.1 0.1" rotation="0 -90 0" src="#model2"></a-gltf-model>  
 	
 	 <!-- Λυκου --> 	
-	 <a-entity id="mybox9" class="clickable" position="3.694 1.36003 -3.48437">
-	  <a-obj-model class="clickable" scale="0.004 0.004 0.004" src="#model9" mtl="#mtl9"> </a-obj-model> 
+	 <a-entity cursor-events  id="mybox9" class="clickable" position="3.694 1.36003 -3.48437">
+	  <a-obj-model cursor-events  id="mybox9.1" class="clickable" scale="0.004 0.004 0.004" src="#model9" mtl="#mtl9"> </a-obj-model> 
 	   <a-sound src="#sound-9"></a-sound>  
 	   <a-text color=black style="font-weight: bold;" position="-0.5 1 0" value="'Ο μικρός Πρίγκιπας και η αλεπού', δημιουργός: Γεωργία Λύκου" visible="false">  </a-text>
 	 </a-entity>
 	  
 	  <!-- Λυκουδη --> 
-	  <a-entity id="mybox10" class="clickable" position="3.694 1.36003 -1.74903">
-	  <a-gltf-model  class="clickable" scale="0.004 0.004 0.004" src="#model6"> </a-gltf-model>  
+	  <a-entity  cursor-events id="mybox10" class="clickable" position="3.694 1.36003 -1.74903">
+	  <a-gltf-model cursor-events  id="mybox10.1" class="clickable" scale="0.004 0.004 0.004" src="#model6"> </a-gltf-model>  
 	   <a-sound src="#sound-10"></a-sound> 
 	   <a-text color=black style="font-weight: bold;" position="-0.5 1 0" value="'Οι Θεοί του Ολύμπου', δημιουργός: Ευθυμία Λυκούδη" visible="false"> </a-text>
 	  </a-entity>
@@ -360,15 +411,15 @@
 		<a-gltf-model position="2.15009 1.2 -1.81786" scale="0.1 0.1 0.1" rotation="0 -90 0" src="#model2"></a-gltf-model>  
 	   
 	<!-- Μαρινος --> 	
-	 <a-entity id="mybox11" class="clickable" position="3.694 1.36003 -3.48437">
-	  <a-obj-model class="clickable" scale="0.004 0.004 0.004" src="#model10" mtl="#mtl10"> </a-obj-model> 
+	 <a-entity cursor-events id="mybox11" class="clickable" position="3.694 1.36003 -3.48437">
+	  <a-obj-model cursor-events  id="mybox11.1" class="clickable" scale="0.004 0.004 0.004" src="#model10" mtl="#mtl10"> </a-obj-model> 
 	   <a-sound src="#sound-11"></a-sound>  
 	   <a-text color=black style="font-weight: bold;" position="-0.5 1 0" value="'Απο το Γκόσπελ στο Ροκ', δημιουργός: Αντώνης Μαρίνος" visible="false">  </a-text>
 	  </a-entity>
 	  	  
 	 <!-- Μπουκουβαλα --> 
-	  <a-entity id="mybox12" class="clickable" position="3.694 1.36003 -1.74903">
-	  <a-obj-model  class="clickable" scale="0.004 0.004 0.004" src="#model17" mtl="#mtl17"> </a-obj-model> 
+	  <a-entity cursor-events  id="mybox12" class="clickable" position="3.694 1.36003 -1.74903">
+	  <a-obj-model cursor-events  id="mybox12.1" class="clickable" scale="0.004 0.004 0.004" src="#model17" mtl="#mtl17"> </a-obj-model> 
 	   <a-sound src="#sound-12"></a-sound> 
 	   <a-text color=black style="font-weight: bold;" position="-0.5 1 0" value="'Ήχος', δημιουργός: Σταυρούλα Μπουκουβάλα" visible="false"> </a-text>
 	   </a-entity>
@@ -380,8 +431,8 @@
 		<a-gltf-model position="2.15009 1.2 -1.81786" scale="0.1 0.1 0.1" rotation="0 -90 0" src="#model2"></a-gltf-model>  
 	   
 	 <!-- Οικονομου --> 
-	   <a-entity id="mybox13" class="clickable" position="3.694 1.36003 -2.6906">
-	   <a-obj-model class="clickable" scale="0.004 0.004 0.004" src="#model11" mtl="#mtl11"> </a-obj-model> 
+	   <a-entity cursor-events  id="mybox13" class="clickable" position="3.694 1.36003 -2.6906">
+	   <a-obj-model cursor-events  id="mybox13.1" class="clickable" scale="0.004 0.004 0.004" src="#model11" mtl="#mtl11"> </a-obj-model> 
 	    <a-sound src="#sound-13"></a-sound>  
 	    <a-text color=black style="font-weight: bold;" position="-0.5 1 0" value="'Νάνος Βαλαωρίτης: Μικρός Θρήνος', δημιουργός: Κωνσταντίνος - Ερνέστο Οικονόμου" visible="false">  </a-text>
 	   </a-entity>
@@ -395,15 +446,15 @@
 		<a-gltf-model position="2.15009 1.2 -1.81786" scale="0.1 0.1 0.1" rotation="0 -90 0" src="#model2"></a-gltf-model>  
 	
 	 <!-- Παπαπαυλου --> 	
-	 <a-entity id="mybox14" class="clickable" position="3.694 1.36003 -3.48437">
-	  <a-obj-model class="clickable" scale="0.004 0.004 0.004" src="#model12" mtl="#mtl12"> </a-obj-model>  
+	 <a-entity cursor-events id="mybox14" class="clickable" position="3.694 1.36003 -3.48437">
+	  <a-obj-model cursor-events  id="mybox14.1" class="clickable" scale="0.004 0.004 0.004" src="#model12" mtl="#mtl12"> </a-obj-model>  
 	   <a-sound src="#sound-14"></a-sound>  
 	   <a-text color=black style="font-weight: bold;" position="-0.5 1 0" value="'Ζωή Βαλάση: Όπου η Τρελούτσικη γίνεται ένας ήλιος αρμυρός, ήλιος θαλασσινός', δημιουργός: Χριστίνα Παπαπαύλου, αφήγηση: Θάνος Τσαβουσέλης" visible="false">  </a-text>
 	  </a-entity>
 	  	  	  
 	 <!-- Σπαης --> 
-	  <a-entity id="mybox15" class="clickable" position="3.694 1.36003 -1.74903">
-	  <a-gltf-model class="clickable" scale="0.004 0.004 0.004" src="#model6"> </a-gltf-model>  
+	  <a-entity cursor-events  id="mybox15" class="clickable" position="3.694 1.36003 -1.74903">
+	  <a-gltf-model cursor-events  id="mybox15.1" class="clickable" scale="0.004 0.004 0.004" src="#model6"> </a-gltf-model>  
 	   <a-sound src="#sound-15"></a-sound> 
 	   <a-text color=black style="font-weight: bold;" position="-0.5 1 0" value="'Ο Μέγας Αλέξανδρος και η Εκστρατεία του', δημιουργός: Γιώργος Σπαής" visible="false"> </a-text>
 	  </a-entity>
@@ -415,35 +466,35 @@
 		<a-gltf-model position="2.15009 1.2 -1.81786" scale="0.1 0.1 0.1" rotation="0 -90 0" src="#model2"></a-gltf-model>  
 	   	
     <!-- Χαιδογιαννου --> 	
-	  <a-entity id="mybox16" class="clickable" position="3.694 1.36003 -3.48437">
-	   <a-obj-model class="clickable" scale="0.004 0.004 0.004" src="#model13" mtl="#mtl13"> </a-obj-model>
+	  <a-entity cursor-events  id="mybox16" class="clickable" position="3.694 1.36003 -3.48437">
+	   <a-obj-model cursor-events  id="mybox16.1" class="clickable" scale="0.004 0.004 0.004" src="#model13" mtl="#mtl13"> </a-obj-model>
 	    <a-sound src="#sound-16"></a-sound>  
 	    <a-text color=black style="font-weight: bold;" position="-0.5 1 0" value="'Ήχος', δημιουργός: Δέσποινα Χαϊδόγιαννου" visible="false">  </a-text>
 	  </a-entity>
 	  	
      <!-- Χαλαζουκα --> 
-	  <a-entity id="mybox17" class="clickable" position="3.694 1.36003 -1.74903">
-	  <a-obj-model  class="clickable" scale="0.004 0.004 0.004" src="#model14" mtl="#mtl14"> </a-obj-model> 
+	  <a-entity cursor-events  id="mybox17" class="clickable" position="3.694 1.36003 -1.74903">
+	  <a-obj-model cursor-events  id="mybox17.1" class="clickable" scale="0.004 0.004 0.004" src="#model14" mtl="#mtl14"> </a-obj-model> 
 	   <a-sound src="#sound-17"></a-sound> 
 	   <a-text color=black style="font-weight: bold;" position="-0.5 1 0" value="'Η Παρέα', δημιουργός: Στέλλα Χαλατζούκα" visible="false"> </a-text>
 	  </a-entity>
 	 </a-entity>
 
-	   <a-entity id="desk3-left" position="-8.4 0 11.15558">
+	   <a-entity cursor-events  id="desk3-left" position="-8.4 0 11.15558">
 		<a-gltf-model position="3.66662 0.35 -2.67138" scale="1 0.9 1" rotation="0 -180 0" src="#model1"></a-gltf-model>
 		<a-gltf-model position="2.15009 1.2 -3.53337" scale="0.1 0.1 0.1" rotation="0 -90 0" src="#model2"></a-gltf-model>  
 		<a-gltf-model position="2.15009 1.2 -1.81786" scale="0.1 0.1 0.1" rotation="0 -90 0" src="#model2"></a-gltf-model>  
 	   	   	
     <!-- Χαραλαμπιδη  --> 	
-	  <a-entity id="mybox18" class="clickable" position="3.694 1.36003 -3.48437">
-	  <a-obj-model  class="clickable" scale="0.004 0.004 0.004" src="#model15" mtl="#mtl15"> </a-obj-model>
+	  <a-entity cursor-events  id="mybox18" class="clickable" position="3.694 1.36003 -3.48437">
+	  <a-obj-model cursor-events  id="mybox18.1"  class="clickable" scale="0.004 0.004 0.004" src="#model15" mtl="#mtl15"> </a-obj-model>
 	   <a-sound src="#sound-18"></a-sound>  
 	   <a-text color=black style="font-weight: bold;" position="-0.5 1 0" value="'Η Γη ως Ουράνιο Σώμα', δημιουργός: Αλεξάνδρα Χαραλαμπίδη" visible="false">  </a-text>
 	  </a-entity>
 	  	  	
      <!-- Χλωροκωστα --> 
-	  <a-entity id="mybox19" class="clickable" position="3.694 1.36003 -1.74903">
-	  <a-obj-model  class="clickable" scale="0.004 0.004 0.004" src="#model16" mtl="#mtl16"> </a-obj-model>
+	  <a-entity cursor-events id="mybox19" class="clickable" position="3.694 1.36003 -1.74903">
+	  <a-obj-model cursor-events  id="mybox19.1" class="clickable" scale="0.004 0.004 0.004" src="#model16" mtl="#mtl16"> </a-obj-model>
 	   <a-sound src="#sound-19"></a-sound> 
 	   <a-text color=black style="font-weight: bold;" position="-0.5 1 0" value="'To Μηχάνημα', δημιουργός: Μαρία Χλωροκώστα" visible="false"> </a-text>
 	  </a-entity>
@@ -453,40 +504,34 @@
 
 
 <!-- Global Sound Stopper Cube -->
-<a-entity id="soundStopper" position="10.30675 1.91407 -6.12374" class="clickable"> 
-	<a-obj-model  class="clickable" position="-0.214 0.47073 0.67431" rotation="0 180 0" scale="0.005 0.005 0.005" src="#model20" mtl="#mtl20"> </a-obj-model>
+<a-entity cursor-events id="soundStopper" position="10.30675 1.91407 -6.12374" class="clickable"> 
+	<a-obj-model cursor-events  id="soundStopper.1" class="clickable" position="-0.214 0.47073 0.67431" rotation="0 180 0" scale="0.005 0.005 0.005" src="#model20" mtl="#mtl20"> </a-obj-model>
  <!-- <a-box class="clickable" color="black" depth="0.5" height="0.5" width="0.5"></a-box>-->
 </a-entity>
 
   
     <!-- Player -->
-      <a-entity id="rig" movement-controls="constrainToNavMesh: true; speed: 0.5;" position="0 0 0">
+      <a-entity id="rig" movement-controls="constrainToNavMesh: true; speed: 0.5;" position="0 0 0" inactivity-listener>
         <a-entity id="camera"
                   camera
                   position="0 1.7 0"
                   look-controls="pointerLockEnabled: true">
-           <a-cursor position="0 0 -0.3" scale="0.35 0.35 0.35" fuse="false" raycaster="objects: .clickable"></a-cursor>
-        </a-entity>
+           <a-cursor id="cursor" position="0 0 -0.3" scale="0.35 0.35 0.35" fuse="false" raycaster="objects: .clickable ; far: 20"></a-cursor>
+        
+		<!-- Uses oculus-touch-controls + smooth-locomotion / snap-turn to move and turn -->
+		   <a-entity id="move-left" oculus-touch-controls="hand: left" smooth-locomotion="target: #rig; reference: #camera"></a-entity>
+	       <a-entity id="move-right" oculus-touch-controls="hand: right" snap-turn="target: #rig; reference: #camera"></a-entity>
+		
+	    <!-- Uses laser-controls for raycasting - we can add raycaster with laser-controls -->
+		   <a-entity id="laser-left" laser-controls="hand: left;"></a-entity>
+	       <a-entity id="laser-right" laser-controls="hand: right;"></a-entity>	
+		</a-entity>
       </a-entity>
 	  
     </a-scene>
 	
 
-
-<!-- LOCAL AUTO RELOAD
-<script>
-   window.addEventListener('DOMContentLoaded', () => {
-     const url = new URL(window.location);
-     const hasReloaded = url.searchParams.get("reloaded");
-
-     if (!hasReloaded) {setTimeout(() => {
-          url.searchParams.set("reloaded", "true");
-          window.location.href = url.toString();
-                                         }, 3000);
-                       }
-                                                     });
-</script> -->
-
+<!-- Script for reloading the 3D scene page -->
 <script>
 if (!sessionStorage.getItem('hasReloaded')) {
     sessionStorage.setItem('hasReloaded', 'true');
@@ -539,7 +584,7 @@ if (!sessionStorage.getItem('hasReloaded')) {
 </script>
 
 
-
+<!-- Script for playing sounds & showing the div UI -->
 <script>
    var currentlyPlayingSound = null;
    var currentlyVisibleText = null;
@@ -613,6 +658,108 @@ if (!sessionStorage.getItem('hasReloaded')) {
    }
 </script>
 
+<!-- Script for INACTIVITY CHECK -->
+<script>
+      AFRAME.registerComponent('inactivity-listener', 
+	  {
+        schema: {},
+        init: function () 
+		{
+          this.INACTIVITY_DELAY = 90000; // 1 min & 30 seconds of no movement before showing warning
+          this.COUNTDOWN_DURATION = 10; // 10 seconds countdown before redirect
+
+          this.lastPosition = new THREE.Vector3();
+          this.el.object3D.getWorldPosition(this.lastPosition);
+
+          this.inactivityStartTime = performance.now();
+          this.countdownTimer = null;
+          this.remainingSeconds = this.COUNTDOWN_DURATION;
+
+          this.warningDiv = document.getElementById('warningDiv');
+          this.countdownSpan = document.getElementById('countdown');
+          this.warningVisible = false;
+        },
+
+        tick: function () 
+		{
+          const currentPosition = new THREE.Vector3();
+          this.el.object3D.getWorldPosition(currentPosition);
+
+          const hasMoved =
+            Math.abs(currentPosition.x - this.lastPosition.x) > 0.001 ||
+            Math.abs(currentPosition.z - this.lastPosition.z) > 0.001;
+
+          if (hasMoved) 
+		  {
+            this.resetInactivityTimer();
+            this.lastPosition.copy(currentPosition);
+          } 
+		  else if (!this.warningVisible && performance.now() - this.inactivityStartTime > this.INACTIVITY_DELAY) 
+		  {
+            this.startCountdown();
+          }
+        },
+
+       // Function for resetting the inactivity time (if the user DID move)
+        resetInactivityTimer: function () 
+		{
+          this.inactivityStartTime = performance.now();
+          this.hideWarning();
+		  
+          if (this.countdownTimer) 
+		  {
+            clearInterval(this.countdownTimer);
+            this.countdownTimer = null;
+          }
+        },
+
+       // Function for starting the timer countdown before redirecting
+        startCountdown: function () 
+		{
+          this.warningVisible = true;
+          this.remainingSeconds = this.COUNTDOWN_DURATION;
+          this.updateCountdownDisplay();
+          this.warningDiv.style.display = 'block';
+
+          this.countdownTimer = setInterval(() => 
+		  {
+            this.remainingSeconds--;
+            this.updateCountdownDisplay();
+
+            if (this.remainingSeconds <= 0) 
+			{
+              clearInterval(this.countdownTimer);
+              window.location.href = './index.html';
+            }
+          }, 1000);
+        },
+
+       // Function for hiding the warning div
+        hideWarning: function () 
+		{
+          this.warningVisible = false;
+          this.warningDiv.style.display = 'none';
+          this.countdownSpan.classList.remove('countdown-warning');
+        },
+
+       // Function that changes the countdown span element in the last 5 seconds
+        updateCountdownDisplay: function () 
+		{
+          this.countdownSpan.textContent = this.remainingSeconds;
+
+          if (this.remainingSeconds <= 5) 
+		  {
+            this.countdownSpan.classList.add('countdown-warning');
+          } 
+		  else 
+		  {
+            this.countdownSpan.classList.remove('countdown-warning');
+          }
+        }
+      });
+</script>
+
+<!-- Script for English to Greek Translation in a-text -->
 <script>	
 var text1=document.getElementById('font1');
 var text2=document.getElementById('font2');
@@ -645,6 +792,8 @@ var greek=true;
              });
 
 </script>
+
+<!-- Script for mobile controls -->
 <script>
             var move_cam= document.getElementById("rig");
             var move_cam3D= move_cam.object3D;
@@ -711,29 +860,35 @@ var greek=true;
               function clear_d(){
                 clearInterval(interval_d);
               }
-              </script>
 </script>
-      <script>
+
+
+<!-- Script to SHOW/HIDE mobile buttons -->
+<script>
         var a=  document.getElementById("toggleButton1");
         var b=  document.getElementById("toggleButton2");
         var c=  document.getElementById("toggleButton3");
         var d=  document.getElementById("toggleButton4");
 
-function isMobile() {
+ function isMobile() 
+  {
     const regex = /Mobi|Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
     return regex.test(navigator.userAgent);
+  }
   
-   }
-  if (isMobile()) {
+  if (isMobile()) 
+  {
     console.log("Mobile");
     a.style.display = "block";
     b.style.display = "block";
     c.style.display = "block";
     d.style.display = "block";
-  } else {
+  } 
+  else 
+  {
     console.log("Desktop");
 
-/* For Debugging Purposes
+   /* For Debugging Purposes
 	a.style.display = "block";
     b.style.display = "block";
     c.style.display = "block";
@@ -743,10 +898,50 @@ function isMobile() {
     b.style.display = "none";
     c.style.display = "none";
     d.style.display = "none";
+   }
+</script> 
 
-  }
-  
+<!-- Script to HIDE cursor if on VR Mode -->
+<script>
+  const scene = document.querySelector('a-scene');
+  const cursor = document.getElementById('cursor');
 
-            </script> 
+  scene.addEventListener('enter-vr', () => 
+  {
+    cursor.setAttribute('visible', false); // Hide cursor in VR
+  });
+
+  scene.addEventListener('exit-vr', () => 
+  {
+    cursor.setAttribute('visible', true); // Show it again outside VR
+  });
+</script>
+
+
+<!-- Script for VR Controls (creates component for VR controls) -->
+<script>
+   AFRAME.registerComponent('cursor-events', 
+         {
+	      init: function () 
+		      {	
+				this.el.addEventListener('click', function (evt) 
+				   {
+					let el = evt.detail.intersection.object.el;
+					console.log('Click on: ',el.id, '  by player');
+				   });
+				
+				 this.el.addEventListener('mouseenter', function (evt)
+					{
+					  console.log("Mouse entered " , evt.detail.intersection.object.el.id);				
+					});
+					
+					this.el.addEventListener('mouseleave', function (evt)
+					{
+					  console.log("Mouse exited ");				
+					});
+				}
+		   });
+</script>
+
   </body>
 </html>
